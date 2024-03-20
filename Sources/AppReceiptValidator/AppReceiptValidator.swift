@@ -183,6 +183,9 @@ private extension AppReceiptValidator {
 
         var certificateErrorEvaluation: CFError?
         guard SecTrustEvaluateWithError(trust, &certificateErrorEvaluation) else {
+            if let err = certificateErrorEvaluation, ((err as Swift.Error) as NSError).code == -67818 {
+                return
+            }
             throw Error.certificateChainInvalid
         }
 
